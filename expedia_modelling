@@ -1,0 +1,1281 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Math-499-modelling.ipynb",
+      "provenance": [],
+      "collapsed_sections": [],
+      "machine_shape": "hm"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "jfOrgaZZQcUX",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "M_UhbCpLRPbD",
+        "colab_type": "code",
+        "outputId": "dab353e2-c371-4545-c047-3a714d15ea54",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 122
+        }
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Go to this URL in a browser: https://accounts.google.com/o/oauth2/auth?client_id=947318989803-6bn6qk8qdgf4n4g3pfee6491hc0brc4i.apps.googleusercontent.com&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&scope=email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdocs.test%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.photos.readonly%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fpeopleapi.readonly&response_type=code\n",
+            "\n",
+            "Enter your authorization code:\n",
+            "··········\n",
+            "Mounted at /content/drive\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "bcFzxY3uQ4yQ",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "X_train=pd.read_pickle('/content/drive/Shared drives/MATH499-Expedia/X_train.pkl')\n",
+        "X_test=pd.read_pickle('/content/drive/Shared drives/MATH499-Expedia/X_test.pkl')\n",
+        "y_train=pd.read_pickle('/content/drive/Shared drives/MATH499-Expedia/y_train.pkl')\n",
+        "y_test=pd.read_pickle('/content/drive/Shared drives/MATH499-Expedia/y_test.pkl')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "4545jok2TMCY",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn.linear_model import LogisticRegression"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "WnXo_EQRTZFc",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "log_reg= LogisticRegression()"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "aSIg2bCoTgCQ",
+        "colab_type": "code",
+        "outputId": "a2cbe116-413e-4e72-cdd6-abad08f0826d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 156
+        }
+      },
+      "source": [
+        "log_reg.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/linear_model/logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.\n",
+            "  FutureWarning)\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\n",
+              "                   intercept_scaling=1, l1_ratio=None, max_iter=100,\n",
+              "                   multi_class='warn', n_jobs=None, penalty='l2',\n",
+              "                   random_state=None, solver='warn', tol=0.0001, verbose=0,\n",
+              "                   warm_start=False)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "LazeSS_vTzAX",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = log_reg.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "aBMHFrVVT6Z1",
+        "colab_type": "code",
+        "outputId": "ed8a71b6-f188-4cfa-e3fd-4e4bbad6ec76",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 224
+        }
+      },
+      "source": [
+        "from sklearn.metrics import classification_report as report\n",
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/metrics/classification.py:1437: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.\n",
+            "  'precision', 'predicted', average, warn_for)\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.92      1.00      0.96   4667285\n",
+            "           1       0.00      0.00      0.00    430905\n",
+            "\n",
+            "    accuracy                           0.92   5098190\n",
+            "   macro avg       0.46      0.50      0.48   5098190\n",
+            "weighted avg       0.84      0.92      0.88   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "w7evx4F1VO-6",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn import tree\n",
+        "decision_tree=tree.DecisionTreeClassifier()"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "jl-6WSyLVe8W",
+        "colab_type": "code",
+        "outputId": "4820cb42-c529-40f8-9774-c04a402fd708",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 119
+        }
+      },
+      "source": [
+        "decision_tree.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,\n",
+              "                       max_features=None, max_leaf_nodes=None,\n",
+              "                       min_impurity_decrease=0.0, min_impurity_split=None,\n",
+              "                       min_samples_leaf=1, min_samples_split=2,\n",
+              "                       min_weight_fraction_leaf=0.0, presort=False,\n",
+              "                       random_state=None, splitter='best')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "g8xz3VqSWAQ2",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = decision_tree.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "KndRnM1_WFZy",
+        "colab_type": "code",
+        "outputId": "91e071c9-feb1-4286-d4b7-e241db542792",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.91      0.96      0.94   4667285\n",
+            "           1       0.02      0.01      0.01    430905\n",
+            "\n",
+            "    accuracy                           0.88   5098190\n",
+            "   macro avg       0.47      0.48      0.47   5098190\n",
+            "weighted avg       0.84      0.88      0.86   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tlBUaqHtYJsH",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn.neural_network import MLPClassifier"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "ThdIXpAMYX50",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        " nn = MLPClassifier()"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-CGv4rwwYflX",
+        "colab_type": "code",
+        "outputId": "6394397d-68b9-45d7-87b0-a4f6e3081b3a",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 190
+        }
+      },
+      "source": [
+        "nn.fit(X_train, y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/neural_network/multilayer_perceptron.py:568: UserWarning: Training interrupted by user.\n",
+            "  warnings.warn(\"Training interrupted by user.\")\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "MLPClassifier(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,\n",
+              "              beta_2=0.999, early_stopping=False, epsilon=1e-08,\n",
+              "              hidden_layer_sizes=(100,), learning_rate='constant',\n",
+              "              learning_rate_init=0.001, max_iter=200, momentum=0.9,\n",
+              "              n_iter_no_change=10, nesterovs_momentum=True, power_t=0.5,\n",
+              "              random_state=None, shuffle=True, solver='adam', tol=0.0001,\n",
+              "              validation_fraction=0.1, verbose=False, warm_start=False)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 18
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "J1lNmg46Ykld",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = nn.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "7Ys9JJbOYnhW",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "AzigEvQamWju",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn import neighbors"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "Ie70W2ghmYZ5",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "Knn=neighbors.KNeighborsClassifier()"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "dgtKv6mymgyw",
+        "colab_type": "code",
+        "outputId": "7f77948f-d39d-448f-b8f9-45def13d121f",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        }
+      },
+      "source": [
+        "Knn.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',\n",
+              "                     metric_params=None, n_jobs=None, n_neighbors=5, p=2,\n",
+              "                     weights='uniform')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 22
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1Mf5bczSml-c",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = Knn.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "rO385Ffpmntu",
+        "colab_type": "code",
+        "outputId": "7c20aa40-fff4-46e2-b8e0-d8f21a882683",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.92      0.99      0.95   4667285\n",
+            "           1       0.09      0.01      0.02    430905\n",
+            "\n",
+            "    accuracy                           0.91   5098190\n",
+            "   macro avg       0.50      0.50      0.48   5098190\n",
+            "weighted avg       0.85      0.91      0.87   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "gbR6FVvez-00",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "log_reg_adj=LogisticRegression(class_weight='balanced')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "BENH1Kor0egU",
+        "colab_type": "code",
+        "outputId": "357acd53-91af-439c-818d-6ecc5ca3d6f8",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 156
+        }
+      },
+      "source": [
+        "log_reg_adj.fit(X_train, y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/linear_model/logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.\n",
+            "  FutureWarning)\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LogisticRegression(C=1.0, class_weight='balanced', dual=False,\n",
+              "                   fit_intercept=True, intercept_scaling=1, l1_ratio=None,\n",
+              "                   max_iter=100, multi_class='warn', n_jobs=None, penalty='l2',\n",
+              "                   random_state=None, solver='warn', tol=0.0001, verbose=0,\n",
+              "                   warm_start=False)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 32
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wW7FgukE0iqj",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = log_reg_adj.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "73JsyInK0k3Y",
+        "colab_type": "code",
+        "outputId": "b3c2ae17-14cc-4d5d-8f94-d32fa7f503f6",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.94      0.49      0.65   4667285\n",
+            "           1       0.11      0.69      0.19    430905\n",
+            "\n",
+            "    accuracy                           0.51   5098190\n",
+            "   macro avg       0.53      0.59      0.42   5098190\n",
+            "weighted avg       0.87      0.51      0.61   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "1CmbPSqL44kx",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "Knn_adj=neighbors.KNeighborsClassifier(weights='distance')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "XkEtcL555CTD",
+        "colab_type": "code",
+        "outputId": "d224e12a-7bb3-427c-cf09-1012f5bd595d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        }
+      },
+      "source": [
+        "Knn_adj.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',\n",
+              "                     metric_params=None, n_jobs=None, n_neighbors=5, p=2,\n",
+              "                     weights='distance')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 37
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "kTvgaEQN5RaA",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = Knn_adj.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "c_cCN0uu5VRy",
+        "colab_type": "code",
+        "outputId": "daa5e428-6cb9-44db-cbf3-37c7a2d47a44",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.91      0.96      0.94   4667285\n",
+            "           1       0.03      0.01      0.02    430905\n",
+            "\n",
+            "    accuracy                           0.88   5098190\n",
+            "   macro avg       0.47      0.49      0.48   5098190\n",
+            "weighted avg       0.84      0.88      0.86   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "eAi4nFnccOlW",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "decision_tree_adj=tree.DecisionTreeClassifier(class_weight='balanced')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "QdSJCu9hcYi_",
+        "colab_type": "code",
+        "outputId": "8aa3f3c4-06d7-4ac4-c6ae-9994161edc24",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 119
+        }
+      },
+      "source": [
+        "decision_tree_adj.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "DecisionTreeClassifier(class_weight='balanced', criterion='gini',\n",
+              "                       max_depth=None, max_features=None, max_leaf_nodes=None,\n",
+              "                       min_impurity_decrease=0.0, min_impurity_split=None,\n",
+              "                       min_samples_leaf=1, min_samples_split=2,\n",
+              "                       min_weight_fraction_leaf=0.0, presort=False,\n",
+              "                       random_state=None, splitter='best')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 41
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "i4fwWDScccwt",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = decision_tree_adj.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "HoZFG2mNcf9k",
+        "colab_type": "code",
+        "outputId": "7cc88ccb-46c6-4ac5-f38e-4c3b9c30d5eb",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.91      0.75      0.82   4667285\n",
+            "           1       0.08      0.23      0.12    430905\n",
+            "\n",
+            "    accuracy                           0.71   5098190\n",
+            "   macro avg       0.50      0.49      0.47   5098190\n",
+            "weighted avg       0.84      0.71      0.76   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "R9qP_gxweqAA",
+        "colab_type": "code",
+        "outputId": "49d3a8f2-94b5-40a9-b01e-c4d594c1790f",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 71
+        }
+      },
+      "source": [
+        "from imblearn.over_sampling import SMOTE"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/externals/six.py:31: DeprecationWarning: The module is deprecated in version 0.21 and will be removed in version 0.23 since we've dropped support for Python 2.7. Please rely on the official version of six (https://pypi.org/project/six/).\n",
+            "  \"(https://pypi.org/project/six/).\", DeprecationWarning)\n"
+          ],
+          "name": "stderr"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UEMpj71Ce0ms",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "X_train_sampled, y_train_sample = SMOTE().fit_resample(X_train, y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qTMfVZHhfAMj",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "decision_tree_sampled=tree.DecisionTreeClassifier(class_weight='balanced')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "WV_YZK6vfLsN",
+        "colab_type": "code",
+        "outputId": "5b511b62-e73e-491f-e0e4-86564e33be59",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 119
+        }
+      },
+      "source": [
+        "decision_tree_sampled.fit(X_train_sampled,y_train_sample)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "DecisionTreeClassifier(class_weight='balanced', criterion='gini',\n",
+              "                       max_depth=None, max_features=None, max_leaf_nodes=None,\n",
+              "                       min_impurity_decrease=0.0, min_impurity_split=None,\n",
+              "                       min_samples_leaf=1, min_samples_split=2,\n",
+              "                       min_weight_fraction_leaf=0.0, presort=False,\n",
+              "                       random_state=None, splitter='best')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 48
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "D1VQiqPAfSVe",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = decision_tree_sampled.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "CAAGStWEfVOE",
+        "colab_type": "code",
+        "outputId": "5b69a156-3947-4e5c-fec7-7915798df106",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.91      0.82      0.87   4667285\n",
+            "           1       0.08      0.16      0.11    430905\n",
+            "\n",
+            "    accuracy                           0.77   5098190\n",
+            "   macro avg       0.50      0.49      0.49   5098190\n",
+            "weighted avg       0.84      0.77      0.80   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tWOEjVYtkFsD",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn.ensemble import VotingClassifier"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2cq285N0mm6E",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn import neighbors\n",
+        "from sklearn.metrics import classification_report as report"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "JyGonJXXnL3G",
+        "colab_type": "code",
+        "outputId": "5a64469c-9de2-48a9-b8d7-79b2f9f5ebd5",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 156
+        }
+      },
+      "source": [
+        "log_reg_adj=LogisticRegression(class_weight='balanced')\n",
+        "log_reg_adj.fit(X_train, y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/linear_model/logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.\n",
+            "  FutureWarning)\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LogisticRegression(C=1.0, class_weight='balanced', dual=False,\n",
+              "                   fit_intercept=True, intercept_scaling=1, l1_ratio=None,\n",
+              "                   max_iter=100, multi_class='warn', n_jobs=None, penalty='l2',\n",
+              "                   random_state=None, solver='warn', tol=0.0001, verbose=0,\n",
+              "                   warm_start=False)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-FFCzGT9nYpg",
+        "colab_type": "code",
+        "outputId": "f0ea2332-ec54-4368-8b93-593f96508ecb",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 68
+        }
+      },
+      "source": [
+        "Knn_adj=neighbors.KNeighborsClassifier(weights='distance')\n",
+        "Knn_adj.fit(X_train, y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "KNeighborsClassifier(algorithm='auto', leaf_size=30, metric='minkowski',\n",
+              "                     metric_params=None, n_jobs=None, n_neighbors=5, p=2,\n",
+              "                     weights='distance')"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "hW9rZkNGl7M3",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "model = VotingClassifier(estimators=[('KNN_adj', Knn_adj), ('log_reg_adj', log_reg_adj)], voting='hard')"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "WCaxkknMmPQE",
+        "colab_type": "code",
+        "outputId": "eb109e1d-34af-4353-e473-a1b9409c4dd0",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 411
+        }
+      },
+      "source": [
+        "model.fit(X_train,y_train)"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "/usr/local/lib/python3.6/dist-packages/sklearn/linear_model/logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.\n",
+            "  FutureWarning)\n"
+          ],
+          "name": "stderr"
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "VotingClassifier(estimators=[('KNN_adj',\n",
+              "                              KNeighborsClassifier(algorithm='auto',\n",
+              "                                                   leaf_size=30,\n",
+              "                                                   metric='minkowski',\n",
+              "                                                   metric_params=None,\n",
+              "                                                   n_jobs=None, n_neighbors=5,\n",
+              "                                                   p=2, weights='distance')),\n",
+              "                             ('log_reg_adj',\n",
+              "                              LogisticRegression(C=1.0, class_weight='balanced',\n",
+              "                                                 dual=False, fit_intercept=True,\n",
+              "                                                 intercept_scaling=1,\n",
+              "                                                 l1_ratio=None, max_iter=100,\n",
+              "                                                 multi_class='warn',\n",
+              "                                                 n_jobs=None, penalty='l2',\n",
+              "                                                 random_state=None,\n",
+              "                                                 solver='warn', tol=0.0001,\n",
+              "                                                 verbose=0,\n",
+              "                                                 warm_start=False))],\n",
+              "                 flatten_transform=True, n_jobs=None, voting='hard',\n",
+              "                 weights=None)"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "sQfkK49CmTiL",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "pred = model.predict(X_test)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "B42q_gqynkpE",
+        "colab_type": "code",
+        "outputId": "1d5dda37-35ca-410e-83c6-255f07802cfd",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 170
+        }
+      },
+      "source": [
+        "print(report(y_test, pred))"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "           0       0.91      0.97      0.94   4667285\n",
+            "           1       0.03      0.01      0.01    430905\n",
+            "\n",
+            "    accuracy                           0.89   5098190\n",
+            "   macro avg       0.47      0.49      0.48   5098190\n",
+            "weighted avg       0.84      0.89      0.86   5098190\n",
+            "\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "5wa4PaV05Aru",
+        "colab_type": "code",
+        "outputId": "b2bb6e39-8fcc-48bc-e696-05999f01726a",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 224
+        }
+      },
+      "source": [
+        "X_train.head()"
+      ],
+      "execution_count": 0,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>hotel_continent</th>\n",
+              "      <th>hotel_country</th>\n",
+              "      <th>hotel_market</th>\n",
+              "      <th>is_package</th>\n",
+              "      <th>orig_destination_distance</th>\n",
+              "      <th>srch_destination_id</th>\n",
+              "      <th>srch_destination_type_id</th>\n",
+              "      <th>stay_dur</th>\n",
+              "      <th>user_location_city</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>4</td>\n",
+              "      <td>8</td>\n",
+              "      <td>111</td>\n",
+              "      <td>True</td>\n",
+              "      <td>911.5000</td>\n",
+              "      <td>8825</td>\n",
+              "      <td>3</td>\n",
+              "      <td>4</td>\n",
+              "      <td>19744</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2</td>\n",
+              "      <td>50</td>\n",
+              "      <td>368</td>\n",
+              "      <td>False</td>\n",
+              "      <td>363.7500</td>\n",
+              "      <td>12264</td>\n",
+              "      <td>6</td>\n",
+              "      <td>2</td>\n",
+              "      <td>23511</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2</td>\n",
+              "      <td>50</td>\n",
+              "      <td>412</td>\n",
+              "      <td>False</td>\n",
+              "      <td>1608.0000</td>\n",
+              "      <td>8277</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>27117</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2</td>\n",
+              "      <td>50</td>\n",
+              "      <td>675</td>\n",
+              "      <td>False</td>\n",
+              "      <td>58.9375</td>\n",
+              "      <td>12233</td>\n",
+              "      <td>6</td>\n",
+              "      <td>2</td>\n",
+              "      <td>19294</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>6</td>\n",
+              "      <td>204</td>\n",
+              "      <td>1760</td>\n",
+              "      <td>False</td>\n",
+              "      <td>6040.0000</td>\n",
+              "      <td>18822</td>\n",
+              "      <td>6</td>\n",
+              "      <td>3</td>\n",
+              "      <td>14405</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "   hotel_continent  hotel_country  ...  stay_dur  user_location_city\n",
+              "0                4              8  ...         4               19744\n",
+              "1                2             50  ...         2               23511\n",
+              "2                2             50  ...         1               27117\n",
+              "3                2             50  ...         2               19294\n",
+              "4                6            204  ...         3               14405\n",
+              "\n",
+              "[5 rows x 9 columns]"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 14
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "kSAqYvpk5B8M",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": 0,
+      "outputs": []
+    }
+  ]
+}
